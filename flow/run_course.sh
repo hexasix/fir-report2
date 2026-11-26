@@ -90,7 +90,7 @@ run_sim gate.log work.tb_fir_alu "+SEED=$SEED"
 run_sim activity.log work.tb_fir_alu "+SEED=$SEED" +power "+POWER_SAMPLES=$POWER_SAMPLES"
 require_outputs fir_alu.vcd
 
-"$PT" -f "$REPORT2_DIR/flow/pt.tcl" 2>&1 | tee pt.log
+PT_RUN_DIR="$RUN_DIR" "$PT" -f "$REPORT2_DIR/flow/pt.tcl" 2>&1 | tee pt.log
 require_outputs pt_setup.rpt pt_hold.rpt pt_summary.rpt pt_check.rpt pt_activity.rpt pt_power.rpt
 
 # Failures here do not remove the functional or static results. Cell delays
