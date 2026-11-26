@@ -2,7 +2,7 @@
 module tb_fir_alu;
     parameter CLK_PERIOD_NS = 2.0;
     parameter integer RANDOM_SAMPLES = 10000;
-    localparam integer LAST_GROUP_LATENCY = 6;
+    parameter integer LAST_GROUP_LATENCY = 6;
     localparam signed [63:0] SCALE = 64'sd2097152;
 
     reg clk = 0, rstn = 1;

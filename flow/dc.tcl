@@ -7,7 +7,12 @@ set_app_var link_library [concat [list *] $target_library $synthetic_library]
 file mkdir dc_work
 if {[catch {
     define_design_lib WORK -path [file join $pwd_out dc_work]
-    analyze -format verilog [file join $root rtl fir_alu.v]
+    set rtl [file join $root rtl fir_alu.v]
+    if {$::env(COMPILE_PROFILE) eq "pipeline"} {
+        analyze -format verilog -define {FIR_ALU_PIPELINED} $rtl
+    } else {
+        analyze -format verilog $rtl
+    }
     elaborate fir_alu
     current_design fir_alu
     if {![link]} {error "Link failed"}

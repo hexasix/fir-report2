@@ -49,6 +49,21 @@ make course REUSE_DC_FROM=build/course_2.0ns_baseline SDF_SIM=1
 
 默认写入 `build/course_2.0ns_baseline_gate_retry/`。零延迟仿真用 `vlog +delay_mode_zero` 编译网表和标准单元模型，SDF 仿真另建工作库，不使用这个选项。
 
+## 流水线优化候选
+
+`COMPILE_PROFILE=pipeline` 启用三个乘积级（分块部分积、交叉项相加、合并）和两级 36 位末级归约。端口和定点结果不变，连续发射间隔不变；最后一组到输出从 6 拍增至 9 拍，完整 FIR 的 FIFO 取样到输出从 10 拍增至 13 拍。尚无此版本的课程库时序或功耗结果。
+
+```sh
+make test lint COMPILE_PROFILE=pipeline
+make course COMPILE_PROFILE=pipeline TIMING_ONLY=1
+```
+
+先在 `build/course_2.0ns_pipeline/pt_summary.rpt` 看时序。这一步仅综合和 STA，不采集 VCD；基线目录不变。要对同一优化网表继续做门级功能验证和功耗分析，可以复用它：
+
+```sh
+make course COMPILE_PROFILE=pipeline REUSE_DC_FROM=build/course_2.0ns_pipeline
+```
+
 | 文件 | 看什么 |
 |---|---|
 | `fir_alu.nl.v`, `fir_alu.sdf`, `fir_alu.sdc` | 门级网表、延迟、约束 |
