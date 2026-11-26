@@ -41,6 +41,14 @@ SSH clone 需要实验机上的 SSH 认证；也可以通过 GitHub HTTPS 认证
 
 默认输出在 `build/course_2.0ns_baseline/`。脚本按顺序运行 Design Compiler、带 pin-level scoreboard 的零延迟门级仿真、生成稳态门级 VCD、PrimeTime STA 和平均功耗分析。默认 2 ns 理想时钟、0.2 ns 最大输入／输出延迟预算；不含布线提取或时钟树。零延迟波形不包含由实际路径延迟产生的毛刺。可选使用 `SDF_SIM=1` 在功耗分析之后另跑 SDF 门级验证，不能用零延迟功能通过替代时序签核。
 
+如果综合已经成功、只需重试门级仿真和 PrimeTime，且 ALU RTL、综合目标和库没有变，可以保留旧结果并运行：
+
+```sh
+make course REUSE_DC_FROM=build/course_2.0ns_baseline SDF_SIM=1
+```
+
+默认写入 `build/course_2.0ns_baseline_gate_retry/`。零延迟仿真用 `vlog +delay_mode_zero` 编译网表和标准单元模型，SDF 仿真另建工作库，不使用这个选项。
+
 | 文件 | 看什么 |
 |---|---|
 | `fir_alu.nl.v`, `fir_alu.sdf`, `fir_alu.sdc` | 门级网表、延迟、约束 |
